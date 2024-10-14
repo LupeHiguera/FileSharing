@@ -1,0 +1,11 @@
+# Ignore DLL files
+*.dll
+
+# Ignore build directories
+bin/
+obj/
+
+# Rider-specific files and directories
+.idea/
+.idea/*
+.Rider*/ 
