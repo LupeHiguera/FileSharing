@@ -74,7 +74,7 @@ public class CosmosDbService<T> where T : class
     {
         try
         {
-            await _container.ReplaceItemAsync<T>(item, id, new PartitionKey(partitionKey));
+            await _container.ReplaceItemAsync(item, id, new PartitionKey(partitionKey));
             _logger.LogInformation("Item " + id + " Had been successfully updated");
         }
         catch (CosmosException e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)
