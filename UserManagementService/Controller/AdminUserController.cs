@@ -10,20 +10,18 @@ namespace UserManagementService.Controller;
 public class AdminUserController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
-    private readonly ILogger<AdminUserController> _logger;
 
-    public AdminUserController(IUserRepository userRepository, ILogger<AdminUserController> logger)
+    public AdminUserController(IUserRepository userRepository)
     {
         _userRepository = userRepository;
-        _logger = logger;
     }
-    
+
     [HttpGet]
     public async Task<IEnumerable<User>> GetUsers()
     {
         return await _userRepository.GetUserAsync();
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> AddUser(User user)
     {

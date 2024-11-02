@@ -1,71 +1,65 @@
 using Microsoft.EntityFrameworkCore;
+using UserManagementService.CosmosDb;
 using UserManagementService.Models;
 using UserManagementService.Data;
 
 namespace UserManagementService.Repository;
-public class UserRepository : IUserRepository
+public class UserRepository(CosmosDbService<User> dbService, ILogger<UserRepository> logger) : IUserRepository
 {
-    private readonly UserContext _userContext;
-    private readonly ILogger<UserRepository> _logger;
+    private readonly CosmosDbService<User> _dbService;
     
-    public UserRepository(UserContext userContext, ILogger<UserRepository> logger)
-    {
-        _userContext = userContext;
-        _logger = logger;
-    }
     
-    public async Task<IEnumerable<User>> GetUserAsync()
+    public async Task<IEnumerable<User>> GetUserAsync(string query)
     {
         var userList = new List<User>();
         try
         {
-            userList = await _userContext.Users.ToListAsync();
+            userList = await dbService.GetItemsAsync(query);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error in GetUserAsync");
+            logger.LogError(e, "Error in GetUserAsync");
         }
         finally
         {
-            _logger.LogInformation("GetUserAsync called");
+            logger.LogInformation("GetUserAsync called");
         }
         return userList;
     }
-    
     public async Task<User> GetUserByIdAsync(string id)
     {
         var user = new User();
         try
         {
-            user = await _userContext.Users.FindAsync(id) ?? throw new Exception("User not found");
+            user = await userContext.Users.FindAsync(id) ?? throw new Exception("User not found");
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error in GetUserByIdAsync");
+            logger.LogError(e, "Error in GetUserByIdAsync");
         }
         finally
         {
-            _logger.LogInformation("GetUserByIdAsync called");
+            logger.LogInformation("GetUserByIdAsync called");
         }
         return user;
     }
     
     public async Task AddUserAsync(User user)
     {
-        await _userContext.Users.AddAsync(user);
-        await _userContext.SaveChangesAsync();
+        await userContext.Users.AddAsync(user);
+        await userContext.SaveChangesAsync();
     }
     
     public async Task UpdateUserAsync(User user)
     {
-        _userContext.Users.Update(user);
-        await _userContext.SaveChangesAsync();
+        userContext.Users.Update(user);
+        await userContext.SaveChangesAsync();
     }
     
     public async Task DeleteUserAsync(string id)
     {
         var user = await GetUserByIdAsync(id);
-        _userContext.Users.Remove(user);
-        await _userContext.SaveChangesAsync();
+        userContext.Users.Remove(user);
+        await userContext.SaveChangesAsync();
     }
 }

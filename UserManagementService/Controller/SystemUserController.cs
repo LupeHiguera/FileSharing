@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserManagementService.CosmosDb;
 using UserManagementService.Models;
 using UserManagementService.Repository;
 
@@ -9,32 +10,39 @@ namespace UserManagementService.Controller;
 [Authorize(Roles = "System")]
 public class SystemUserController : ControllerBase
 {
-    private readonly IUserRepository _userRepository;
-    private readonly ILogger<SystemUserController> _logger;
-
-    public SystemUserController(IUserRepository userRepository, ILogger<SystemUserController> logger)
+    private readonly CosmosDbService<User> _dbService;
+    public SystemUserController(CosmosDbService<User> dbService)
     {
-        _userRepository = userRepository;
-        _logger = logger;
+        _dbService = dbService;
     }
-    
+
     [HttpGet]
-    public async Task<IEnumerable<User>> GetUsers()
+    public async Task<IEnumerable<User>> GetUsers(string query)
     {
-        return await _userRepository.GetUserAsync();
+        return await _dbService.GetItemsAsync(query);
     }
     
     [HttpPost]
-    public async Task<IActionResult> AddUser(User user)
+    public async Task<IActionResult> AddUser([FromBody] User user)
     {
-        await _userRepository.AddUserAsync(user);
-        return Ok();
+        var paritionKey = user.Id;
+
+        try
+        {
+            await _dbService.GetItemAsync(user.Id, paritionKey);
+            return Ok("User was added successfully");
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
     
     [HttpPut]
     public async Task<IActionResult> UpdateUser(User user)
     {
-        await _userRepository.UpdateUserAsync(user);
+        var paritionKey = user.Id;
+        await _dbService.UpdateUser(user.Id, user, paritionKey);
         return Ok();
     }
     
