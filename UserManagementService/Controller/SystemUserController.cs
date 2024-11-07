@@ -24,7 +24,7 @@ public class SystemUserController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddUser([FromBody] User user)
     {
-        await _dbService.GetItemAsync(user.Id, user.Id);
+        await _dbService.AddItemAsync(user, user.Id);
         return Ok("User was added successfully");
     }
     

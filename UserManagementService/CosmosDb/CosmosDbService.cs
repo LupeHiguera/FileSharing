@@ -19,7 +19,7 @@ public class CosmosDbService<T> where T : class
     public async Task AddItemAsync(T item, string partitionKey)
     {
         await _container.CreateItemAsync(item, new PartitionKey(partitionKey));
-        _logger.LogInformation("CosmosClient Retrieved" + item.ToString() );
+        _logger.LogInformation("CosmosClient Added" + item.ToString());
     }
 
     public async Task<T> GetItemAsync(string id, string partitionKey)
