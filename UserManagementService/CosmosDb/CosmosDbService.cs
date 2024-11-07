@@ -19,7 +19,7 @@ public class CosmosDbService<T> where T : class
     public async Task AddItemAsync(T item, string partitionKey)
     {
         await _container.CreateItemAsync(item, new PartitionKey(partitionKey));
-        _logger.LogInformation("CosmosClient Retrieved" + item.ToString() );
+        _logger.LogInformation("CosmosClient Added" + item.ToString());
     }
 
     public async Task<T> GetItemAsync(string id, string partitionKey)
@@ -74,7 +74,7 @@ public class CosmosDbService<T> where T : class
     {
         try
         {
-            await _container.ReplaceItemAsync<T>(item, id, new PartitionKey(partitionKey));
+            await _container.ReplaceItemAsync(item, id, new PartitionKey(partitionKey));
             _logger.LogInformation("Item " + id + " Had been successfully updated");
         }
         catch (CosmosException e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserManagementService.CosmosDb;
 using UserManagementService.Models;
-using UserManagementService.Repository;
 
 namespace UserManagementService.Controller;
 [ApiController]
@@ -9,30 +9,30 @@ namespace UserManagementService.Controller;
 [Authorize(Roles = "Admin")]
 public class AdminUserController : ControllerBase
 {
-    private readonly IUserRepository _userRepository;
+    private readonly CosmosDbService<User> _dbService;
 
-    public AdminUserController(IUserRepository userRepository)
+    public AdminUserController(CosmosDbService<User> dbService)
     {
-        _userRepository = userRepository;
+        _dbService = dbService;
     }
-
+    
     [HttpGet]
-    public async Task<IEnumerable<User>> GetUsers()
+    public async Task<IEnumerable<User>> GetUsers(string query)
     {
-        return await _userRepository.GetUserAsync();
+        return await _dbService.GetItemsAsync(query);
     }
 
     [HttpPost]
     public async Task<IActionResult> AddUser(User user)
     {
-        await _userRepository.AddUserAsync(user);
-        return Ok();
+        await _dbService.UpdateUser(user.Id, user, user.Id);
+        return Ok("User was added successfully");
     }
     
     [HttpDelete]
     public async Task<IActionResult> DeleteUser(string id)
     {
-        await _userRepository.DeleteUserAsync(id);
-        return Ok();
+        await _dbService.DeleteItem(id, id);
+        return Ok("User was deleted successfully");
     }
 }

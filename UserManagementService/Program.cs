@@ -1,18 +1,23 @@
-using Microsoft.EntityFrameworkCore;
-using UserManagementService.Data;
-using UserManagementService.Repository;
+using Microsoft.Azure.Cosmos;
+using UserManagementService.CosmosDb;
+using User = UserManagementService.Models.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddDbContext<UserContext>(options =>
+// Register CosmosDbService for User
+builder.Services.AddSingleton(serviceProvider =>
 {
-    options.UseCosmos(
-        builder.Configuration["CosmoDB:Endpoint"] ?? "default_endpoint",
-        builder.Configuration["CosmoDB:Key"] ?? "default_key",
-        builder.Configuration["CosmoDB:DatabaseId"] ?? "default_database");
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var logger = serviceProvider.GetRequiredService<ILogger<CosmosClient>>();
+    var endpoint = configuration["CosmoDB:Endpoint"] ?? "default_endpoint";
+    var key = configuration["CosmoDB:Key"] ?? "default_key";
+    var databaseId = configuration["CosmoDB:DatabaseId"] ?? "default_database";
+    var containerId = configuration["CosmoDB:UserContainerId"] ?? "Users";
+    
+    return new CosmosDbService<User>(endpoint, key, databaseId, containerId, logger);
 });
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -32,5 +37,3 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
-
-
