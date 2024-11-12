@@ -1,44 +1,38 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UserManagementService.CosmosDb;
 using UserManagementService.Models;
+using UserManagementService.Repository;
 
 namespace UserManagementService.Controller;
 [ApiController]
 [Route("api/system/users")]
-//[Authorize(Roles = "System")]
-public class SystemUserController : ControllerBase
+[Authorize(Roles = "System")]
+public class SystemUserController(IUserRepository userRepository) : ControllerBase
 {
-    private readonly CosmosDbService<User> _dbService;
-    public SystemUserController(CosmosDbService<User> dbService)
-    {
-        _dbService = dbService;
-    }
-
     [HttpGet]
     public async Task<IEnumerable<User>> GetUsers(string query)
     {
-        return await _dbService.GetItemsAsync(query);
+        return await userRepository.GetUsers(query);
     }
     
     [HttpPost]
     public async Task<IActionResult> AddUser([FromBody] User user)
     {
-        await _dbService.AddItemAsync(user, user.Id);
+        await userRepository.AddUser(user);
         return Ok("User was added successfully");
     }
     
     [HttpPut]
     public async Task<IActionResult> UpdateUser(User user)
     {
-        await _dbService.UpdateUser(user.Id, user, user.Id);
+        await userRepository.UpdateUser(user);
         return Ok("User was updated successfully");
     }
     
     [HttpDelete]
     public async Task<IActionResult> DeleteUser(string id)
     {
-        await _dbService.DeleteItem(id, id);
+        await userRepository.DeleteUser(id);
         return Ok("User was deleted successfully");
     }
 }
