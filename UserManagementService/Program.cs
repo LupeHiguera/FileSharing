@@ -1,5 +1,6 @@
 using Microsoft.Azure.Cosmos;
 using UserManagementService.CosmosDb;
+using UserManagementService.Repository;
 using User = UserManagementService.Models.User;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,8 @@ builder.Services.AddSingleton(serviceProvider =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 var app = builder.Build();
 

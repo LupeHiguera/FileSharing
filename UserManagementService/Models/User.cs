@@ -5,7 +5,7 @@ namespace UserManagementService.Models;
 public class User
 {
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string id { get; set; }
     [JsonPropertyName("username")]
     public string Username { get; set; }
     [JsonPropertyName("password")]
