@@ -18,13 +18,13 @@ public class UserRepository(CosmosDbService<User> dbService): IUserRepository
 
     public async Task<IActionResult> AddUser(User user)
     {
-        await dbService.AddItemAsync(user, user.Id);
+        await dbService.AddItemAsync(user, user.id);
         return new OkResult();
     }
 
     public async Task<IActionResult> UpdateUser(User user)
     {
-        await dbService.UpdateUser(user.Id, user, user.Id);
+        await dbService.UpdateUser(user.id, user, user.id);
         return new OkResult();
     }
 

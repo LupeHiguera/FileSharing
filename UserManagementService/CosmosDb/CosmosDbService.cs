@@ -18,8 +18,19 @@ public class CosmosDbService<T> where T : class
 
     public async Task AddItemAsync(T item, string partitionKey)
     {
-        await _container.CreateItemAsync(item, new PartitionKey(partitionKey));
-        _logger.LogInformation("CosmosClient Added" + item.ToString());
+        try
+        {
+            await _container.CreateItemAsync(item, new PartitionKey(partitionKey));
+            _logger.LogInformation("CosmosClient Added" + item.ToString());
+        }
+        catch(CosmosException e) when (e.StatusCode == System.Net.HttpStatusCode.Conflict)
+        {
+            _logger.LogError("CosmosClient Error " + item.ToString() + " Already Exists");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("CosmosClient Error " + e.Message);
+        }
     }
 
     public async Task<T> GetItemAsync(string id, string partitionKey)
