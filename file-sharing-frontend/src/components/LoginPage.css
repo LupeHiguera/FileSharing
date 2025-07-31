@@ -1,0 +1,151 @@
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+.login-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    max-width: 450px;
+    width: 100%;
+}
+
+.login-header {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.login-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.login-header p {
+    margin: 10px 0 0 0;
+    opacity: 0.9;
+    font-size: 16px;
+}
+
+.login-content {
+    padding: 40px 30px;
+}
+
+.login-content h2 {
+    margin: 0 0 15px 0;
+    color: #374151;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.login-content > p {
+    color: #6b7280;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #374151;
+    font-weight: 500;
+}
+
+.feature-icon {
+    font-size: 20px;
+    width: 24px;
+    text-align: center;
+}
+
+.login-button {
+    width: 100%;
+    background: #0078d4;
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.2s ease;
+    margin-bottom: 25px;
+}
+
+.login-button:hover {
+    background: #106ebe;
+}
+
+.login-button:active {
+    transform: translateY(1px);
+}
+
+.microsoft-icon {
+    font-size: 18px;
+}
+
+.login-info {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 4px solid #4f46e5;
+}
+
+.login-info p {
+    margin: 8px 0;
+    color: #475569;
+    font-size: 14px;
+}
+
+.login-info p:first-child {
+    margin-top: 0;
+}
+
+.login-info p:last-child {
+    margin-bottom: 0;
+}
+
+.login-info strong {
+    color: #334155;
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 10px;
+    }
+    
+    .login-header {
+        padding: 25px 20px;
+    }
+    
+    .login-header h1 {
+        font-size: 24px;
+    }
+    
+    .login-content {
+        padding: 30px 20px;
+    }
+    
+    .features {
+        gap: 12px;
+    }
+}

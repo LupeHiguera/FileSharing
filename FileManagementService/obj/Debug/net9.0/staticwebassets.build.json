@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "fFeZQn7DmAMHdjl+ErhXEWzXCWGVz1i7LLDZrMPBDCk=",
+  "Source": "FileManagementService",
+  "BasePath": "_content/FileManagementService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
